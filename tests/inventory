@@ -1,0 +1,9 @@
+[sambaDC-master]
+dc0 ansible_host=10.64.0.133 ansible_user=root
+
+[sambaDC-replicas]
+dc1 ansible_host=10.64.0.134 ansible_user=root samba_interface_address=10.64.0.127
+
+[samba-clients]
+cl0 ansible_host=10.64.0.135 ansible_user=root
+cl1 ansible_host=10.64.0.136 ansible_user=root

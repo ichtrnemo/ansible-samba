@@ -1,0 +1,65 @@
+---
+- name: check required variables
+  fail: msg="{{ item }} is not defined"
+  when: item not in vars
+  with_items: "{{ samba_dc_master_required_vars }}"
+
+- name: install samba master packages
+  apt_rpm:
+    pkg: "{{samba_dc_master_packages | join(',')}}"
+    state: installed
+  when: samba_dc_master_packages | length > 0
+  notify: restart samba
+
+- name: update /etc/hosts
+  template:
+    src: hosts.j2
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: 0644
+
+- name: check if already provisioned
+  stat:
+    path: "/var/lib/samba/private/sam.ldb.d/DC={{(samba_realm|upper).replace('.', ',DC=')}}.ldb"
+  register: res
+
+- name: provition domain
+  block:
+    - name: delete smb.conf
+      file:
+        path: /etc/samba/smb.conf
+        state: absent
+    - name: provision samba domain
+      shell: "samba-tool domain provision --realm={{samba_realm|upper}} --domain {{samba_domain|upper}} --adminpass='{{samba_admin_pass}}' --dns-backend={{samba_dns_backend}} --server-role=dc --use-rfc2307 --host-ip={{samba_master_address}}"
+      notify: restart samba
+    - name: set DNS forward
+      lineinfile:
+        path: /etc/samba/smb.conf
+        regexp: 'dns forwarder ='
+        line: "dns forwarder ={{samba_dns_forward}}"
+        backrefs: yes
+        state: present
+      changed_when: false
+      notify: restart samba
+  rescue:
+    - name: provision failed; remove intermidiate results
+      file:
+        path: "/var/lib/samba/private/sam.ldb.d/DC={{(samba_realm|upper).replace('.', ',DC=')}}.ldb"
+        state: absent
+    - fail: msg="domain provision failed"
+  when: res.stat.exists == False
+
+- name: remove all resolve.conf on interfaces
+  block:
+    - shell: find /etc/net/ifaces/ -name 'resolv.conf'
+      register: res
+      changed_when: false
+    - file: path="{{item}}" state=absent
+      with_items: "{{res.stdout_lines}}"
+
+- name: enable samba service
+  service:
+    name: samba
+    enabled: true
+    state: started

@@ -1,0 +1,16 @@
+---
+- name: restart samba
+  service:
+    name: samba
+    enabled: true
+    state: restarted
+
+- name: restart networkmanager
+  service:
+    name: NetworkManager
+    state: restarted
+
+- name: restart network
+  service:
+    name: network
+    state: restarted

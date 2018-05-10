@@ -1,0 +1,35 @@
+---
+samba_required_vars:
+  - samba_flavor
+  - samba_realm
+  - samba_domain
+
+samba_dc_required_vars:
+  - samba_admin_pass
+  - samba_master_address
+
+samba_dc_master_required_vars:
+  - samba_dns_forward
+  - samba_dns_backend # SAMBA_INTERNAL
+
+samba_dc_replica_required_vars: []
+
+samba_dc_common_packages:
+  - bind-utils
+  - krb5-kinit
+  - ldb-tools
+  - samba-DC-common
+  - samba-DC
+  - samba-DC-client
+
+samba_dc_master_packages: []
+
+samba_dc_replica_packages: []
+
+samba_cl_required_vars:
+  - samba_master_address
+
+samba_cl_packages:
+  - samba-client
+  - sssd-ad
+  - task-auth-ad-sssd

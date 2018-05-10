@@ -1,0 +1,22 @@
+---
+- name: unregister node as a replica
+  block:
+  - shell: echo {{samba_admin_pass}} | kinit administrator@{{samba_realm|upper}}
+    changed_when: false
+  - shell: |
+      if samba-tool domain info {{hostvars[inventory_hostname_short]['samba_interface_address']}} -k yes; then
+        samba-tool domain demote -k yes
+        samba-tool dns delete {{samba_master_hostname}} {{samba_realm}} {{inventory_hostname_short}} A {{hostvars[inventory_hostname_short]['samba_interface_address']}} -k yes
+        echo replica_changed
+      fi
+    register: result
+    changed_when: '"replica_changed" in result.stdout'
+    notify: restart samba
+  - file:
+      path: "{{item}}"
+      state: absent
+    with_items:
+      - /var/lib/samba/private/secrets.ldb
+      - /var/lib/samba/private/secrets.tdb
+      - /etc/samba/smb.conf
+    notify: restart samba

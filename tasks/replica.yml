@@ -1,0 +1,30 @@
+---
+- name: check required variables
+  fail: msg="{{ item }} is not defined"
+  when: item not in vars
+  with_items: "{{ samba_dc_replica_required_vars }}"
+
+- name: clean samba replica
+  include_tasks: replica_clean.yml
+  when: samba_clean_replica is defined
+
+- name: install samba replica packages
+  apt_rpm:
+    pkg: "{{samba_dc_replica_packages | join(',')}}"
+    state: installed
+  when: samba_dc_replica_packages | length > 0
+  notify: restart samba
+
+- name: register node as a replica
+  block:
+  - shell: echo {{samba_admin_pass}} | kinit administrator@{{samba_realm|upper}}
+    changed_when: false
+  - shell: |
+      if ! samba-tool dns query {{samba_master_hostname}} {{samba_realm}} {{inventory_hostname_short}} A; then
+        samba-tool dns add {{samba_master_hostname}} {{samba_realm}} {{inventory_hostname_short}} A {{hostvars[inventory_hostname_short]['samba_interface_address']}} -k yes
+        samba-tool domain join {{samba_realm}} DC -k yes
+        echo replica_changed
+      fi
+    register: result
+    changed_when: '"replica_changed" in result.stdout'
+    notify: restart samba

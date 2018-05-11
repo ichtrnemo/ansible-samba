@@ -1,0 +1,23 @@
+[global]
+	security = ads
+	realm = {{samba_realm|upper}}
+	workgroup = {{samba_domain|upper}}
+	netbios name = {{inventory_hostname_short|upper}}
+	template shell = /bin/bash
+	kerberos method = system keytab
+	wins support = no
+
+	idmap config * : range = 10000-20000000
+	idmap config * : backend = tdb
+[homes]
+	comment = Home Directories
+	browseable = no
+	writable = yes
+
+[printers]
+	comment = All Printers
+	path = /var/spool/samba
+	browseable = no
+	guest ok = no
+	writable = no
+	printable = yes

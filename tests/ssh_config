@@ -1,0 +1,18 @@
+Host tavolga.domain.alt tavolga
+  HostName 10.64.6.100
+  User root
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  ProxyJump e2k
+
+Host e2k.domain.alt e2k
+  HostName 10.64.0.240
+  User root
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+
+Host vm0.domain.alt vm0
+  HostName 10.64.0.50
+  User root
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no

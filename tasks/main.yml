@@ -49,3 +49,7 @@
 - name: refresh kerberos key
   shell: echo {{samba_admin_pass}} | kinit administrator@{{samba_realm|upper}}
   changed_when: false
+  register: task_result
+  until: task_result.rc == 0
+  retries: 30
+  delay: 1

@@ -1,4 +1,4 @@
 # {{ansible_managed}}
-domain {{samba_realm}}
-search {{samba_realm}}
+domain {{samba_realm|lower}}
+search {{samba_realm|lower}}
 nameserver {{samba_master_address}}

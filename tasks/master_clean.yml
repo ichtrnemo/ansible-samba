@@ -1,0 +1,15 @@
+---
+- name: destroy samba master
+  block:
+  - name: stop samba service
+    service:
+      name: samba
+      enabled: false
+      state: stopped
+  - name: clean samba DC state
+    file:
+      path: "{{item}}"
+      state: absent
+    with_items:
+      - /var/lib/samba
+      - /etc/samba/smb.conf

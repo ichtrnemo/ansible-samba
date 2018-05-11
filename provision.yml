@@ -11,7 +11,7 @@
     samba_admin_pass: peebieY4
     samba_dns_forward: 8.8.8.8
     samba_dns_backend: SAMBA_INTERNAL
-    samba_master_address: 10.64.0.133
+    samba_master_address: 10.64.6.1
   tags: [ "master" ]
 
 - name: deploy samba DC replicas
@@ -24,8 +24,9 @@
     samba_realm: domain.alt
     samba_domain: domain
     samba_admin_pass: peebieY4
-    samba_master_address: 10.64.0.133
+    samba_master_address: 10.64.6.1
     samba_master_hostname: dc0
+    samba_network: 10.64.6.0/24
   tags: [ "replicas" ]
 
 - name: deploy samba clients
@@ -38,5 +39,5 @@
     samba_realm: domain.alt
     samba_domain: domain
     samba_admin_pass: peebieY4
-    samba_master_address: 10.64.0.133
+    samba_master_address: 10.64.6.1
   tags: [ "clients" ]

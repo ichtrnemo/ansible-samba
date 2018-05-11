@@ -1,0 +1,8 @@
+SAMBA_DOMAIN={{samba_domain}}
+SAMBA_REALM={{samba_realm}}
+SAMBA_ADMIN_PASS={{samba_admin_pass}}
+SAMBA_MASTER_ADDRESS={{samba_master_address}}
+SAMBA_MASTER_HOSTNAME={{samba_master_hostname}}
+SAMBA_MASTERS="{{ hostvars['localhost']['samba_masters'] | join(' ') }}"
+SAMBA_REPLICAS="{{ hostvars['localhost']['samba_replicas'] | join(' ') }}"
+SAMBA_CLIENTS="{{ hostvars['localhost']['samba_clients'] | join(' ') }}"

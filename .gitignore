@@ -1,6 +1,10 @@
 # temprorary files
+.pytest_cache/
+.vagrant/
+.tmp/
 *~
 *#
+*.retry
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

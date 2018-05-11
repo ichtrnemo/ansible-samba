@@ -6,7 +6,7 @@
 
 - name: clean samba replica
   include_tasks: replica_clean.yml
-  when: samba_clean_replica is defined
+  when: samba_clean_replica is defined and samba_clean_replica is true
 
 - name: install samba replica packages
   apt_rpm:

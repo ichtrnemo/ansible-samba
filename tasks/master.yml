@@ -4,6 +4,10 @@
   when: item not in vars
   with_items: "{{ samba_dc_master_required_vars }}"
 
+- name: clean samba master
+  include_tasks: master_clean.yml
+  when: samba_clean_master is defined and samba_clean_master is true
+
 - name: install samba master packages
   apt_rpm:
     pkg: "{{samba_dc_master_packages | join(',')}}"

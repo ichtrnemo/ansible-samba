@@ -5,4 +5,5 @@ e2k ansible_host=e2k
 vm0 ansible_host=vm0 samba_interface_address=10.64.6.1
 
 [samba-clients]
+#cl0 ansible_host=cl0 ansible_user=root
 tavolga ansible_host=tavolga ansible_user=root

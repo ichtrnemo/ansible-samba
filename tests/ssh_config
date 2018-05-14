@@ -16,3 +16,9 @@ Host vm0.domain.alt vm0
   User root
   UserKnownHostsFile /dev/null
   StrictHostKeyChecking no
+
+Host cl0.domain.alt cl0
+  HostName 10.64.0.60
+  User root
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no

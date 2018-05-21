@@ -28,6 +28,13 @@
     path: "/var/lib/samba/private/sam.ldb.d/DC={{(samba_realm|upper).replace('.', ',DC=')}}.ldb"
   register: res
 
+- name: make sure that the /var/lib/samba exists
+  file:
+    path: /var/lib/samba
+    state: directory
+    owner: root
+    mode: 0755
+
 - name: provition domain
   block:
     - name: delete smb.conf

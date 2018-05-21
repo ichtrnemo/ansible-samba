@@ -26,6 +26,7 @@
     samba_admin_pass: peebieY4
     samba_master_address: 10.64.6.1
     samba_master_hostname: dc0
+    samba_network: 10.64.6.0/24
   tags: [ "replicas" ]
 
 - name: deploy samba clients

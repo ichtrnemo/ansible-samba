@@ -11,6 +11,7 @@
       path: "{{item}}"
       state: absent
     with_items:
-      - /var/lib/samba/private
-      - /var/lib/samba/sysvol
+      - /var/lib/samba
+#      - /var/lib/samba/private
+#      - /var/lib/samba/sysvol
       - /etc/samba/smb.conf

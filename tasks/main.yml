@@ -9,9 +9,8 @@
     pkg: "{{samba_dc_common_packages | join(',')}}"
     state: installed
     update_cache: yes
-  when: samba_dc_common_packages | length > 0
+  when: (samba_dc_common_packages | length > 0) and samba_flavor != 'client'
   notify: restart samba
-  when: samba_flavor != 'client'
 
 - name: create /etc/krb5.conf
   template:

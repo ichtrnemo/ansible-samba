@@ -37,18 +37,22 @@
 
 - name: provition domain
   block:
-    - name: delete smb.conf
-      file:
-        path: /etc/samba/smb.conf
-        state: absent
+    - name: generate smb.conf
+      template:
+        src: smb.conf.master.j2
+        dest: /etc/samba/smb.conf
     - name: provision samba domain
-      shell: "samba-tool domain provision --realm={{samba_realm|upper}} --domain {{samba_domain|upper}} --adminpass='{{samba_admin_pass}}' --dns-backend={{samba_dns_backend}} --server-role=dc --use-rfc2307 --host-ip={{samba_master_address}}"
+      shell: |
+        service samba stop
+        rm -rf /var/lib/samba
+        mkdir /var/lib/samba
+        samba-tool domain provision --realm={{samba_realm|upper}} --domain={{samba_domain|upper}} --adminpass='{{samba_admin_pass}}' --dns-backend={{samba_dns_backend}} --server-role=dc --use-rfc2307 --host-ip={{samba_master_address}}
       notify: restart samba
     - name: set DNS forward
       lineinfile:
         path: /etc/samba/smb.conf
         regexp: 'dns forwarder ='
-        line: "dns forwarder ={{samba_dns_forward}}"
+        line: "\tdns forwarder ={{samba_dns_forward}}"
         backrefs: yes
         state: present
       changed_when: false

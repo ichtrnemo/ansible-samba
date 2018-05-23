@@ -28,7 +28,7 @@
 
   - name: register samba address
     set_fact:
-      samba_address: results.stdout
+      samba_address: "{{result.stdout}}"
 
   - name: generate smb.conf
     template:

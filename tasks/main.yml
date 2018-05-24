@@ -52,3 +52,9 @@
   until: task_result.rc == 0
   retries: 30
   delay: 1
+
+- name: restart samba service
+  service:
+    name: samba
+    state: restarted
+  when: samba_flavor != 'client'

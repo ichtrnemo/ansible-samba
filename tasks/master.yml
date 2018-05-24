@@ -43,6 +43,7 @@
         dest: /etc/samba/smb.conf
     - name: provision samba domain
       shell: |
+        set -euo pipefail
         service samba stop
         rm -rf /var/lib/samba
         mkdir /var/lib/samba

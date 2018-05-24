@@ -34,8 +34,10 @@
     template:
       src: smb.conf.replica.j2
       dest: /etc/samba/smb.conf
+
   - name: try to joint to the domain as a replica
     shell: |
+      set -euo pipefail
       if ! samba-tool dns query {{samba_master_hostname}} {{samba_realm}} {{inventory_hostname_short}} A; then
         SAMBA_ADDRESS=$(ip r | grep 'scope link' | grep {{samba_network}} | cut -d' ' -f3 | xargs ip -o -4 a sh dev | awk '{print $4;}' | cut -d'/' -f1)
         samba-tool dns add {{samba_master_hostname}} {{samba_realm}} {{inventory_hostname_short}} A $SAMBA_ADDRESS -k yes

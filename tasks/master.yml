@@ -79,3 +79,9 @@
     name: samba
     enabled: true
     state: started
+
+- name: register node in localhost hostvars
+  set_fact:
+    samba_masters: "{{ hostvars['localhost']['samba_masters'] | default([]) }} + [ '{{ inventory_hostname_short }}' ]"
+  delegate_to: localhost
+  delegate_facts: true

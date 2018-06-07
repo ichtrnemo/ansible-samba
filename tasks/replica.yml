@@ -49,3 +49,9 @@
     register: result
     changed_when: '"replica_changed" in result.stdout'
     notify: restart samba
+
+- name: register node in localhost hostvars
+  set_fact:
+    samba_replicas: "{{ hostvars['localhost']['samba_replicas'] | default([]) }} + [ '{{ inventory_hostname_short }}' ]"
+  delegate_to: localhost
+  delegate_facts: true

@@ -69,3 +69,9 @@
 
 - name: join to the domain
   shell: system-auth write ad {{samba_realm|upper}} {{inventory_hostname_short}} {{samba_domain|upper}} 'Administrator' '{{samba_admin_pass}}'
+
+- name: register node in localhost hostvars
+  set_fact:
+    samba_clients: "{{ hostvars['localhost']['samba_clients'] | default([]) }} + [ '{{ inventory_hostname_short }}' ]"
+  delegate_to: localhost
+  delegate_facts: true

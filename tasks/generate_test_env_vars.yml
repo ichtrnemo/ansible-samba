@@ -1,0 +1,4 @@
+---
+- name: generate domain config file
+  local_action: template src="domain_config.j2" dest="{{samba_domain_config_output}}"
+  when: samba_generate_domain_config is defined and samba_generate_domain_config

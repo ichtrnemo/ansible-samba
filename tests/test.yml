@@ -1,7 +1,7 @@
 ---
 - name: deploy master samba DC
   hosts: sambaDC-master
-  become: false
+  become: true
   gather_facts: false
   roles:
   - role: samba
@@ -16,7 +16,7 @@
 
 - name: deploy samba DC replicas
   hosts: sambaDC-replicas
-  become: false
+  become: true
   gather_facts: false
   roles:
   - role: samba
@@ -31,7 +31,7 @@
 
 - name: deploy samba clients
   hosts: samba-clients
-  become: false
+  become: true
   gather_facts: false
   roles:
   - role: samba

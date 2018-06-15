@@ -14,6 +14,9 @@ Prepare virtual environment
 virtualenv .venv
 source .venv/bin/activate
 easy_install $(cat requirements.txt)
+
+vagrant ssh-config > .tmp/ssh_config
+source .tmp/domain_config
 ```
 Run test
 

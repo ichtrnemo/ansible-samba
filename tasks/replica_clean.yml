@@ -4,9 +4,11 @@
   - shell: echo {{samba_admin_pass}} | kinit administrator@{{samba_realm|upper}}
     changed_when: false
   - shell: |
-      if samba-tool domain info {{hostvars[inventory_hostname_short]['samba_interface_address']}} -k yes; then
+      set -euo pipefail
+      SAMBA_ADDRESS=$(ip r | grep 'scope link' | grep {{samba_network}} | cut -d' ' -f3 | xargs ip -o -4 a sh dev | awk '{print $4;}' | cut -d'/' -f1)
+      if samba-tool domain info $SAMBA_ADDRESS -k yes; then
         samba-tool domain demote -k yes
-        samba-tool dns delete {{samba_master_hostname}} {{samba_realm}} {{inventory_hostname_short}} A {{hostvars[inventory_hostname_short]['samba_interface_address']}} -k yes
+        samba-tool dns delete {{samba_master_hostname}} {{samba_realm}} {{inventory_hostname_short}} A $SAMBA_ADDRESS -k yes
         echo replica_changed
       fi
     register: result

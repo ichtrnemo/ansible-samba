@@ -25,14 +25,26 @@
     shell: hostname "{{inventory_hostname_short}}.{{samba_realm}}"
     changed_when: false
 
+  - name: purge other resolv.conf`s
+    shell: |
+      find /etc/net/ifaces/*/resolv.conf -rm
+    register: res
+    changed when: res.rc == 0
+    failed_when: false
+
   - name: set master as an only nameserver
     template:
       src: resolv.conf.j2
-      dest: /etc/resolv.conf
+      dest: /etc/net/ifaces/lo/resolv.conf
 
   - name: black magick
     shell: update_chrooted all
     changed_when: false
+
+  - name: restart network service
+    service:
+      name: network
+      state: restarted
   when: samba_flavor != 'gen_test_env'
 
 - name: deploy DC master

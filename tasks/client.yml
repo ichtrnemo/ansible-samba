@@ -33,7 +33,15 @@
     - nm_conf_is.changed == false
   notify: restart networkmanager
 
-- name: enable eth0
+- name: check if /etc/net/ifaces/eth0 exists
+  stat: path=/etc/net/ifaces/eth0
+  register: ifaces_eth0_st
+  failed_when: false
+
+- set_fact:
+    managed_by_etcnet: "{{ ifaces_eth0_st.stat.exists and ifaces_eth0_st.stat.isdir }}"
+
+- name: enable eth0 (etcnet)
   lineinfile:
     path: /etc/net/ifaces/eth0/options
     regexp: '^DISABLED='
@@ -41,7 +49,8 @@
     backrefs: yes
     state: present
   register: net_conf_is
-  changed_when: net_conf_is.changed
+  changed_when: managed_by_etcnet|bool and net_conf_is.changed
+  when: managed_by_etcnet|bool
   notify: restart network
 
 

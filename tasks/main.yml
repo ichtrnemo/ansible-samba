@@ -5,6 +5,19 @@
     when: item not in vars
     with_items: "{{ samba_dc_required_vars }}"
 
+  - name: install openresolv and etcnet
+    apt_rpm: pkg=openresolv,etcnet state=present
+    register: openresolv_install
+
+  # XXX: touching /etc/resolv.conf might start altlinux-openresolv.service,
+  # (if it hasn't been started before, i.e. if the openresolv package haven't
+  # been installed before applying this role). altlinux-openresolv overwrites
+  # modifications of /etc/resolv.conf done by this role. Therefore explicitly
+  # start altlinux-openresolv before adjusting /etc/resolv.conf
+  - name: start altlinux-openresolv
+    service: name=altlinux-openresolv state=started
+    when: openresolv_install.changed|bool
+
   - name: install samba DC common packages
     apt_rpm:
       pkg: "{{samba_dc_common_packages | join(',')}}"

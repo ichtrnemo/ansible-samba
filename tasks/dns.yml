@@ -1,0 +1,22 @@
+---
+
+- name: purge other resolv.conf`s
+  shell: |
+    find /etc/net/ifaces/*/resolv.conf -rm
+  register: res
+  changed when: res.rc == 0
+  failed_when: false
+
+- name: set master DC as the 1st nameserver
+  template:
+    src: resolv.conf.j2
+    dest: /etc/net/ifaces/lo/resolv.conf
+
+- name: black magic
+  shell: update_chrooted all
+  changed_when: false
+
+- name: restart network service
+  service:
+    name: network
+    state: restarted

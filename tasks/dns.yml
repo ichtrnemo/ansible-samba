@@ -20,3 +20,11 @@
   service:
     name: network
     state: restarted
+
+- name: validate /etc/resolv.conf
+  command: >
+    grep -q -e 'nameserver {{ item }}' /etc/resolv.conf
+  with_items:
+    - "{{ samba_master_address }}"
+    - "{{ samba_dns_forward }}"
+

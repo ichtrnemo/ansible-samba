@@ -44,11 +44,6 @@
   changed_when: net_conf_is.changed
   notify: restart network
 
-- name: set master as an only nameserver
-  template:
-    src: resolv.conf.j2
-    dest: /etc/net/ifaces/eth0/resolv.conf
-  notify: restart network
 
 - meta: flush_handlers
 

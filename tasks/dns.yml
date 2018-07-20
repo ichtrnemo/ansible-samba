@@ -1,8 +1,8 @@
 ---
 
 - name: purge other resolv.conf`s
-  shell: |
-    find /etc/net/ifaces/*/resolv.conf -rm
+  command: >
+    find /etc/net/ifaces -name resolv.conf -delete
   register: res
   changed when: res.rc == 0
   failed_when: false

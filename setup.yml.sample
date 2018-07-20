@@ -1,0 +1,8 @@
+---
+
+- hosts:
+    - samba_master_dc
+    - samba_domain_controllers
+    - samba_clients
+  roles:
+    - samba

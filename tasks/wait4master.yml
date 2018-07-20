@@ -1,0 +1,12 @@
+---
+
+- name: install bind-utils (dig)
+  apt_rpm: pkg=bind-utils state=present
+
+- name: wait for master DC to be up
+  command: >
+    dig -t SRV +noall +answer _kerberos._udp.{{ samba_realm|lower }}
+  register: kerberos_srv_records
+  until: kerberos_srv_records.stdout|trim != ''
+  delay: 10
+  retries: 60

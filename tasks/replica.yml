@@ -15,6 +15,9 @@
   when: samba_dc_replica_packages | length > 0
   notify: restart samba
 
+- name: wait for master DC to start up
+  include_tasks: wait4master.yml
+
 - name: register node as a replica
   block:
   - name: get kerberos keky

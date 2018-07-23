@@ -86,6 +86,9 @@
     src: smb.conf.client.j2
     dest: /etc/samba/smb.conf
 
+- name: wait for domain controller(s) to start up
+  include_tasks: wait4master.yml
+
 - name: join to the domain
   shell: system-auth write ad {{samba_realm|upper}} {{inventory_hostname_short}} {{samba_domain|upper}} 'Administrator' '{{samba_admin_pass}}'
 

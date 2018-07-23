@@ -1,0 +1,4 @@
+# {{ ansible_managed }}
+[Resolve]
+DNS={{ samba_master_address }} {{ samba_dns_forward }}
+Domains={{ samba_realm|lower }}

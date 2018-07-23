@@ -1,0 +1,54 @@
+---
+
+- name: purge other resolv.conf`s
+  command: >
+    find /etc/net/ifaces -name resolv.conf -delete
+  register: res
+  changed when: res.rc == 0
+  failed_when: false
+
+- name: set master DC as the 1st nameserver
+  template:
+    src: resolv.conf.j2
+    dest: /etc/net/ifaces/lo/resolv.conf
+
+- name: check if systemd-networkd is installed
+  command: >
+    rpm -q systemd-networkd
+  register: systemd_networkd_present
+  failed_when: false
+
+- name: create /etc/systemd/resolved.conf.d
+  file:
+    path: /etc/systemd/resolved.conf.d
+    state: directory
+    mode: 0755
+
+- name: set master DC as the 1st nameserver, systemd-resolved
+  template:
+    src: resolved-conf.d-samba.j2
+    dest: /etc/systemd/resolved.conf.d/samba.conf
+    mode: 0644
+
+- name: restart systemd-resolved
+  service: name=systemd-resolved state=restarted
+  when: systemd_networkd_present.rc == 0
+
+- name: black magic
+  shell: update_chrooted all
+  changed_when: false
+
+- name: restart network service
+  service:
+    name: network
+    state: restarted
+  with_sequence: start=1 end=2
+# XXX: resolvconf updates /etc/resolv.conf only on 2nd run
+
+- name: validate /etc/resolv.conf
+  command: >
+    grep -q -e 'nameserver {{ item }}' /etc/resolv.conf
+  with_items:
+    - "{{ samba_master_address }}"
+    - "{{ samba_dns_forward }}"
+

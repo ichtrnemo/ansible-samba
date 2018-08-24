@@ -9,6 +9,15 @@
     apt_rpm: pkg=openresolv,etcnet state=present
     register: openresolv_install
 
+  - name: check if altlinux-openresolv service exists
+    command: service altlinux-openresolv status
+    register:
+      altlinux_openresolv_status
+    failed_when: False
+
+  - set_fact:
+      altlinux_openresolv_exists: "{{ altlinux_openresolv_status.rc != 3 }}"
+
   # XXX: touching /etc/resolv.conf might start altlinux-openresolv.service,
   # (if it hasn't been started before, i.e. if the openresolv package haven't
   # been installed before applying this role). altlinux-openresolv overwrites
@@ -16,7 +25,7 @@
   # start altlinux-openresolv before adjusting /etc/resolv.conf
   - name: start altlinux-openresolv
     service: name=altlinux-openresolv state=started
-    when: openresolv_install.changed|bool
+    when: altlinux_openresolv_exists|bool and openresolv_install.changed|bool
 
   - name: install samba DC common packages
     apt_rpm:

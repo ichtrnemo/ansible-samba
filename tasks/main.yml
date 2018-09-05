@@ -51,6 +51,11 @@
 
   when: samba_flavor != 'gen_test_env'
 
+- name: create openldap config directory
+  file:
+   path: "/etc/openldap"
+   state: directory
+
 - name: disable reverse dns for ldap requests
   template:
     src: ldap.conf.j2

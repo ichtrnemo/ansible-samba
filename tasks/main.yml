@@ -51,6 +51,11 @@
 
   when: samba_flavor != 'gen_test_env'
 
+- name: disable reverse dns for ldap requests
+  template:
+    src: ldap.conf.j2
+    dest: /etc/openldap/ldap.conf
+
 - name: deploy DC master
   include_tasks: master.yml
   when: samba_flavor == 'master'

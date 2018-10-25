@@ -1,7 +1,7 @@
 """Configuration for pytest runner."""
 
 from pytest_bdd import given, when
-from pytest_bdd.fixtures import *
+import pytest
 import paramiko
 from paramiko.config import SSHConfig
 from os.path import expanduser

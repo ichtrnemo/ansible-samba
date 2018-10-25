@@ -4,7 +4,7 @@
   command: >
     find /etc/net/ifaces -name resolv.conf -delete
   register: res
-  changed when: res.rc == 0
+  changed_when: res.rc == 0
   failed_when: false
 
 - name: set master DC as the 1st nameserver

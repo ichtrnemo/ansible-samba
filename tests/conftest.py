@@ -12,7 +12,7 @@ import inspect
 pytest_plugins = "pytester"
 samba = {}
 
-SSH_USERNAME = "vagrant"
+SSH_USERNAME = os.getenv("SSH_USERNAME", "vagrant")
 
 class Target:
     def __init__(self, host):

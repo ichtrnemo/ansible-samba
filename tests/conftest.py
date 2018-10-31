@@ -72,7 +72,7 @@ def read_env_vars():
         if v not in os.environ:
             print('{} required but is not set'.format(v))
             sys.exit(1)
-        samba[v.split('_',1)[1].lower()] = os.environ[v] if v not in list_vars else os.environ[v].split(' ')
+        samba[v.split('_',1)[1].lower()] = os.environ[v] if v not in list_vars else filter(None, os.environ[v].split(' '))
     samba['all_hosts'] = samba['masters'] + samba['replicas'] + samba['clients']
 read_env_vars()
 

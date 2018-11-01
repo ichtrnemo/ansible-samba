@@ -55,6 +55,12 @@
 
 
 - meta: flush_handlers
+  ignore_errors: yes
+
+- name: wait for node to comeback
+  wait_for_connection:
+    delay: 3
+    timeout: 30
 
 - name: update resolver, step 1
   command: resolvconf -d NetworkManager

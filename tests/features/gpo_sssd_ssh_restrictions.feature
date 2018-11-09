@@ -9,6 +9,6 @@ Feature: SSSD GPO ssh restrictions
 
     Examples:
     | user      | password     | dest | command   |  rc |
-    | adgpotest | ADgpoTest123 | cl0  | /bin/true |   0 |
-    | adgpotest | ADgpoTest123 | clw0 | /bin/true | 255 |
+    | adgpotest | ADgpoTest123 | clw0 | /bin/true |   0 |
     | adgpotest | ADgpoTest123 | clw1 | /bin/true | 255 |
+    | adgpotest | ADgpoTest123 | clw2 | /bin/true | 255 |

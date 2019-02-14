@@ -18,7 +18,6 @@ samba_dc_common_packages:
   - bind-utils
   - krb5-kinit
   - ldb-tools
-  - samba-DC-common
   - samba-DC
   - samba-DC-client
 

@@ -9,9 +9,8 @@
   when: samba_clean_replica is defined and samba_clean_replica
 
 - name: install samba replica packages
-  apt_rpm:
-    pkg: "{{samba_dc_replica_packages | join(',')}}"
-    state: installed
+  package: name={{item}} state=present
+  with_items: "{{samba_dc_replica_packages}}"
   when: samba_dc_replica_packages | length > 0
   notify: restart samba
 

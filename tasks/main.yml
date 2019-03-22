@@ -28,10 +28,8 @@
     when: altlinux_openresolv_exists|bool and openresolv_install.changed|bool
 
   - name: install samba DC common packages
-    apt_rpm:
-      pkg: "{{samba_dc_common_packages | join(',')}}"
-      state: installed
-      update_cache: yes
+    package: name={{item}} state=present
+    with_items: "{{samba_dc_common_packages}}"
     when: (samba_dc_common_packages | length > 0) and samba_flavor != 'client'
     notify: restart samba
 

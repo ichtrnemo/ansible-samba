@@ -9,9 +9,7 @@
   when: samba_clean_master is defined and samba_clean_master
 
 - name: install samba master packages
-  apt_rpm:
-    pkg: "{{samba_dc_master_packages | join(',')}}"
-    state: installed
+  shell: "apt-get install -y {{samba_dc_master_packages | join(' ')}}"
   when: samba_dc_master_packages | length > 0
   notify: restart samba
 

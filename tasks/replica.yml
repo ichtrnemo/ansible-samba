@@ -44,7 +44,7 @@
         samba-tool dns add {{samba_master_hostname}} {{samba_realm}} {{inventory_hostname_short}} A $SAMBA_ADDRESS -k yes
       fi
       if [[ ! -f /var/lib/samba/private/sam.ldb.d/DC={{(samba_realm|upper).replace('.', ',DC=')}}.ldb ]]; then
-        samba-tool domain join {{samba_realm}} DC -k yes > /var/log/samba/join.log 2>&1
+        samba-tool domain join {{samba_realm}} DC -k yes 2>&1 | tee /var/log/samba/join.log
         echo replica_changed
       fi
     register: result

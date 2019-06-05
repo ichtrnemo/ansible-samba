@@ -1,5 +1,4 @@
 ---
-
 - name: purge other resolv.conf`s
   command: >
     find /etc/net/ifaces -name resolv.conf -delete
@@ -7,10 +6,21 @@
   changed_when: res.rc == 0
   failed_when: false
 
-- name: set master DC as the 1st nameserver
+- name: set master DC as the 1st nameserver for clients
   template:
     src: resolv.conf.j2
     dest: /etc/net/ifaces/lo/resolv.conf
+  vars:
+    master_nameserver: "{{samba_master_address}}"
+  when: samba_flavor == 'client'
+
+- name: set localhost as the nameserver for controllers
+  template:
+    src: resolv.conf.j2
+    dest: /etc/net/ifaces/lo/resolv.conf
+  vars:
+    master_nameserver: '127.0.0.1'
+  when: samba_flavor == 'master' or samba_flavor == 'replica'
 
 - name: check if systemd-networkd is installed
   command: >

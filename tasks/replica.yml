@@ -57,9 +57,7 @@
       dest: /etc/net/ifaces/lo/resolv.conf
     vars:
       master_nameserver: '127.0.0.1'
-    notify: restart_network
-
-
+    notify: restart network
 
 - name: register node in localhost hostvars
   set_fact:

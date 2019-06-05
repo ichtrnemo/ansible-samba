@@ -20,7 +20,7 @@
     dest: /etc/net/ifaces/lo/resolv.conf
   vars:
     master_nameserver: '127.0.0.1'
-  when: samba_flavor == 'master' or samba_flavor == 'replica'
+  when: samba_flavor == 'master'
 
 - name: check if systemd-networkd is installed
   command: >

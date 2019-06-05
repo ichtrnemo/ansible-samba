@@ -51,6 +51,14 @@
     changed_when: '"replica_changed" in result.stdout'
     notify: restart samba
 
+  - name: set localhost as a nameserver
+    template:
+      src: resolv.conf.j2
+      dest: /etc/net/ifaces/lo/resolv.conf
+    vars:
+      master_nameserver: '127.0.0.1'
+    when: samba_flavor == 'master'
+
 - name: register node in localhost hostvars
   set_fact:
     samba_replicas: "{{ hostvars['localhost']['samba_replicas'] | default([]) }} + [ '{{ inventory_hostname_short }}' ]"

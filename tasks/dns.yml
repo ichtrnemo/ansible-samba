@@ -12,7 +12,7 @@
     dest: /etc/net/ifaces/lo/resolv.conf
   vars:
     master_nameserver: "{{samba_master_address}}"
-  when: samba_flavor == 'client'
+  when: samba_flavor == 'client' or samba_flavor == 'replica'
 
 - name: set localhost as the nameserver for controllers
   template:

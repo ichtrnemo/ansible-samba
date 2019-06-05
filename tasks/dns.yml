@@ -53,20 +53,3 @@
     name: network
     state: restarted
   with_sequence: start=1 end=2
-# XXX: resolvconf updates /etc/resolv.conf only on 2nd run
-
-- name: validate /etc/resolv.conf on clients
-  command: >
-    grep -q -e 'nameserver {{ item }}' /etc/resolv.conf
-  with_items:
-    - "{{ samba_master_address }}"
-    - "{{ samba_dns_forward }}"
-  when: samba_flavor == 'client'
-
-- name: validate /etc/resolv.conf on controllers
-  command: >
-    grep -q -e 'nameserver {{ item }}' /etc/resolv.conf
-  with_items:
-    - "127.0.0.1"
-    - "{{ samba_dns_forward }}"
-  when: samba_flavor == 'master' or samba_flavor == 'replica'

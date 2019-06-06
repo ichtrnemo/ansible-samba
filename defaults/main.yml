@@ -20,6 +20,7 @@ samba_dc_common_packages:
   - ldb-tools
   - samba-dc
   - samba-dc-client
+  - sshpass
 
 samba_dc_master_packages: []
 
@@ -32,3 +33,4 @@ samba_cl_packages:
   - samba-client
   - sssd-ad
   - task-auth-ad-sssd
+  - sshpass

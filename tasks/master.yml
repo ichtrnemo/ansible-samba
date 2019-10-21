@@ -33,6 +33,24 @@
     owner: root
     mode: 0755
 
+- name: Stop BIND9 daemon
+  service:
+    name: bind
+    enabled: false
+    state: stopped
+
+# This oneliner must be split into separate port checks or refactored
+# in order to allow to control separate services like Kerberos, LDAP
+# and DNS.
+- name: Check if conflicting processes are running
+  shell: |
+    lsof -i -P -n | grep "TCP .*:\(53\|389\|88\) (LISTEN)" | cut -f1 -d ' ' | uniq
+  register: services
+
+- name: Stop conflicting services
+  shell: "pkill {{ item }}"
+  with_items: "{{ services.stdout_lines }}"
+
 - name: provition domain
   block:
     - name: generate smb.conf

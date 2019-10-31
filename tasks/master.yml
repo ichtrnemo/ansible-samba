@@ -38,6 +38,8 @@
     name: bind
     enabled: false
     state: stopped
+  register: cmd_result
+  failed_when: "cmd_result|failed and ('find' not in cmd_result.msg and 'found' not in cmd_result.msg)"
 
 # This oneliner must be split into separate port checks or refactored
 # in order to allow to control separate services like Kerberos, LDAP

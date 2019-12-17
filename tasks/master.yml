@@ -8,6 +8,9 @@
   include_tasks: master_clean.yml
   when: samba_clean_master is defined and samba_clean_master
 
+- name: prepare samba server
+  include_tasks: prepare.yml
+
 - name: install samba master packages
   shell: "apt-get install -y {{samba_dc_master_packages | join(' ')}}"
   when: samba_dc_master_packages | length > 0
@@ -32,26 +35,6 @@
     state: directory
     owner: root
     mode: 0755
-
-- name: Stop BIND9 daemon
-  service:
-    name: bind
-    enabled: false
-    state: stopped
-  register: cmd_result
-  failed_when: "cmd_result|failed and ('find' not in cmd_result.msg and 'found' not in cmd_result.msg)"
-
-# This oneliner must be split into separate port checks or refactored
-# in order to allow to control separate services like Kerberos, LDAP
-# and DNS.
-- name: Check if conflicting processes are running
-  shell: |
-    lsof -i -P -n | grep "TCP .*:\(53\|389\|88\) (LISTEN)" | cut -f1 -d ' ' | uniq
-  register: services
-
-- name: Stop conflicting services
-  shell: "pkill {{ item }}"
-  with_items: "{{ services.stdout_lines }}"
 
 - name: provition domain
   block:

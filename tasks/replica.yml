@@ -8,6 +8,9 @@
   include_tasks: replica_clean.yml
   when: samba_clean_replica is defined and samba_clean_replica
 
+- name: prepare samba server
+  include_tasks: prepare.yml
+
 - name: install samba replica packages
   shell: "apt-get install -y {{samba_dc_replica_packages | join(' ') }}"
   when: samba_dc_replica_packages | length > 0

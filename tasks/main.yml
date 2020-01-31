@@ -40,8 +40,11 @@
       group: root
       mode: 0644
 
-  - name: set hostname (non permanent)
-    shell: hostname "{{inventory_hostname_short}}.{{samba_realm}}"
+  - name: set hostname
+    shell: |
+      hostname "{{inventory_hostname_short}}.{{samba_realm}}"
+      sed -i "s/^HOSTNAME=.*/HOSTNAME={{inventory_hostname_short}}.{{samba_realm}}/" /etc/sysconfig/network
+      echo "{{inventory_hostname_short}}.{{samba_realm}}" >/etc/hostname
     changed_when: false
 
   - include: dns.yml

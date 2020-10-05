@@ -21,6 +21,7 @@ samba_dc_common_packages:
   - samba-dc
   - samba-dc-client
   - sshpass
+  - alterator-gpupdate
 
 samba_dc_master_packages: []
 
@@ -34,3 +35,4 @@ samba_cl_packages:
   - sssd-ad
   - task-auth-ad-sssd
   - sshpass
+  - alterator-gpupdate

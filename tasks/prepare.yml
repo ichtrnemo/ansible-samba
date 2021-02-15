@@ -12,9 +12,9 @@
 
 - name: Check if conflicting processes are running
   shell: |
-    lsof -i -P -n | grep "TCP .*:\(53\|389\|88\) (LISTEN)" | cut -f1 -d ' ' | uniq
-  register: services
+    lsof -i UDP:53 -i TCP:445 -i TCP:389 -i UDP:88 -F f | grep ^p | sed 's/^p//' | uniq
+  register: conflict_processes
 
 - name: Stop conflicting services
-  shell: "pkill {{ item }}"
-  with_items: "{{ services.stdout_lines }}"
+  shell: "kill {{ item }}"
+  with_items: "{{ conflict_processes.stdout_lines }}"

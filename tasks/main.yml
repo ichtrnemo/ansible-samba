@@ -27,6 +27,9 @@
     service: name=altlinux-openresolv state=started
     when: altlinux_openresolv_exists|bool and openresolv_install.changed|bool
 
+  - name: update apt database
+    shell: "apt-get update"
+
   - name: install samba DC common packages
     shell: "apt-get install -y {{ samba_dc_common_packages | join(' ') }}"
     when: (samba_dc_common_packages | length > 0) and samba_flavor != 'client'

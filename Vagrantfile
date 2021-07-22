@@ -14,21 +14,22 @@ if ARGV[0] == 'up' or ARGV[0] == 'provision'
 end
 
 Vagrant.configure("2") do |config|
+  config.vbguest.auto_update = false
+
   (0..dcs).each_with_index do |n, ndx|
     config.vm.define "dc#{n}" do |dc|
+
       dc.vm.network "private_network", ip: "10.64.6.%s" % [10+n], netmask: 24, virtualbox__intnet: "intnet"
-      dc.vm.box = "BaseALT/alt-server-8.2-x86_64"
-      dc.vm.box_version = "1.0.0"
-      dc.vm.box_download_checksum = "db0d0f26575bafd0bb4989dc00d85539e0fd9272c943b373ebbb6d978a3c15ee"
-      dc.vm.box_download_checksum_type = "sha256"
-      #dc.vm.box_url = "https://vagrantcloud.com/BaseALT/boxes/alt-server-8.2-x86_64/versions/1.0.0/providers/virtualbox.box"
+      dc.vm.box = "BaseALT/alt-server-9.1-amd64"
+      dc.vm.box_version = "2.0.0"
+
     end
   end
 
   (0..cls).each_with_index do |n, ndx|
     config.vm.define "cl#{n}" do |cl|
       cl.vm.network "private_network", ip: "10.64.6.%s" % [100+n], netmask: 24, virtualbox__intnet: "intnet"
-      cl.vm.box = "BaseALT/alt-workstaion-8.2-x86_64"
+      cl.vm.box = "BaseALT/alt-workstation-9.1-amd64"
       cl.vm.box_version = "1.0.0"
 
       if ndx == cls

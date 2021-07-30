@@ -1,0 +1,14 @@
+---
+- name: Disable bind work in chroot
+  shell: control bind-chroot disabled
+
+- name: Disable KRB5RCACHETYPE for bind
+  shell: grep -q KRB5RCACHETYPE /etc/sysconfig/bind || echo 'KRB5RCACHETYPE="none"' >> /etc/sysconfig/bind
+
+- name: Add BIND9_DLZ plugin for bind
+  shell: grep -q 'bind-dns' /etc/bind/named.conf || echo 'include "/var/lib/samba/bind-dns/named.conf";' >> /etc/bind/named.conf
+
+- name: generate options.conf for bind
+  template:
+    src: options.conf.j2
+    dest: /etc/bind/options.conf

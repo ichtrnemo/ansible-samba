@@ -11,6 +11,9 @@
 - name: prepare samba server
   include_tasks: prepare.yml
 
+- name: prepare bind service
+  include_tasks: bind.yml
+
 - name: install samba replica packages
   shell: "apt-get install -y {{samba_dc_replica_packages | join(' ') }}"
   when: samba_dc_replica_packages | length > 0
@@ -47,7 +50,7 @@
         samba-tool dns add {{samba_master_hostname}} {{samba_realm}} {{inventory_hostname_short}} A $SAMBA_ADDRESS -k yes
       fi
       if [[ ! -f /var/lib/samba/private/sam.ldb.d/DC={{(samba_realm|upper).replace('.', ',DC=')}}.ldb ]]; then
-        samba-tool domain join {{samba_realm}} DC -k yes 2>&1 | tee /var/log/samba/join.log
+        samba-tool domain join {{samba_realm}} DC --dns-backend={{samba_dns_backend}} -k yes 2>&1 | tee /var/log/samba/join.log
         echo replica_changed
       fi
     register: result
@@ -61,6 +64,23 @@
     vars:
       master_nameserver: '127.0.0.1'
     notify: restart network
+
+  - name: samba upgrade dns
+    shell: samba_upgradedns --dns-backend={{samba_dns_backend}}
+    when: samba_dns_backend != "SAMBA_INTERNAL"
+    notify: restart bind
+
+  - name: enable bind service
+    service:
+      name: bind
+      enabled: true
+    when: samba_dns_backend != "SAMBA_INTERNAL"
+
+  - name: disable bind service
+    service:
+      name: bind
+      enabled: false
+    when: samba_dns_backend == "SAMBA_INTERNAL"
 
 - name: register node in localhost hostvars
   set_fact:

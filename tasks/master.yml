@@ -11,6 +11,9 @@
 - name: prepare samba server
   include_tasks: prepare.yml
 
+- name: prepare bind service
+  include_tasks: bind.yml
+
 - name: install samba master packages
   shell: "apt-get install -y {{samba_dc_master_packages | join(' ')}}"
   when: samba_dc_master_packages | length > 0
@@ -72,6 +75,13 @@
     name: samba
     enabled: true
     state: started
+
+- name: configure bind service
+  service:
+    name: bind
+    enabled: true
+    state: started
+  when: samba_dns_backend != "SAMBA_INTERNAL"
 
 - name: register node in localhost hostvars
   set_fact:

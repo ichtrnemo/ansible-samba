@@ -10,7 +10,9 @@
 	interfaces = lo {{samba_address}}
 	kerberos method = dedicated keytab
 	dedicated keytab file = /etc/krb5.keytab
-	{% if samba_dns_backend != "SAMBA_INTERNAL" %}server services = -dns{% endif %}
+{% if samba_dns_backend != "SAMBA_INTERNAL" %}
+	server services = -dns
+{% endif %}
 
 [netlogon]
 	path = /var/lib/samba/sysvol/{{samba_domain}}/scripts

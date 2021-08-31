@@ -11,6 +11,7 @@ samba_dc_required_vars:
 samba_dc_master_required_vars:
   - samba_dns_forward
   - samba_dns_backend # SAMBA_INTERNAL | BIND9_DLZ
+  - samba_backend_store # tdb | mdb
 
 samba_dc_replica_required_vars: []
 

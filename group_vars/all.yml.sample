@@ -6,6 +6,7 @@ samba_admin_pass: peebieY4
 samba_network: 192.168.122.0/24
 samba_dns_forward: 192.168.122.1
 samba_dns_backend: SAMBA_INTERNAL
+samba backend_store: tdb
 samba_master_address: "{{ hostvars[groups['samba_master_dc'][0]].ansible_host }}"
 # 192.168.122.68
 samba_master_hostname: "{{ hostvars[groups['samba_master_dc'][0]].inventory_hostname_short }}"

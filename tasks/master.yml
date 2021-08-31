@@ -51,7 +51,7 @@
         service samba stop
         rm -rf /var/lib/samba
         mkdir /var/lib/samba
-        samba-tool domain provision --realm={{samba_realm|upper}} --domain={{samba_domain|upper}} --adminpass='{{samba_admin_pass}}' --dns-backend={{samba_dns_backend}} --server-role=dc --use-rfc2307 --host-ip={{samba_master_address}}
+        samba-tool domain provision --realm={{samba_realm|upper}} --domain={{samba_domain|upper}} --adminpass='{{samba_admin_pass}}' --dns-backend={{samba_dns_backend}} --backend-store={{samba_backend_store}} --server-role=dc --use-rfc2307 --host-ip={{samba_master_address}}
       notify: restart samba
     - name: set DNS forward
       lineinfile:

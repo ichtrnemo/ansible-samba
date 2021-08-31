@@ -10,7 +10,8 @@
     samba_domain: domain
     samba_admin_pass: peebieY4
     samba_dns_forward: 8.8.8.8
-    samba_dns_backend: SAMBA_INTERNAL
+    samba_dns_backend: BIND9_DLZ
+    samba_backend_store: tdb
     samba_master_address: 10.64.6.1
   tags: [ "master" ]
 

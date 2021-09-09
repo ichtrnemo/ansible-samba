@@ -58,7 +58,7 @@
         path: /etc/samba/smb.conf
         regexp: 'dns forwarder ='
         line: "\tdns forwarder ={{samba_dns_forward}}"
-        backrefs: yes
+        backrefs: true #yes
         state: present
       changed_when: false
       notify: restart samba

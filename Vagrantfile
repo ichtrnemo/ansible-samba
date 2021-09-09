@@ -1,8 +1,8 @@
 require 'mkmf'
 require 'fileutils'
 
-NUM_CONTROLLERS=3
-NUM_CLIENTS=3
+NUM_CONTROLLERS=1
+NUM_CLIENTS=1
 
 dcs=NUM_CONTROLLERS - 1
 cls=NUM_CLIENTS - 1
@@ -61,7 +61,8 @@ Vagrant.configure("2") do |config|
             samba_admin_pass: "peebieY4",
             samba_dns_forward: "8.8.8.8",
             samba_dns_backend: "BIND9_DLZ",
-            samba_backend_store: "tdb",
+            samba_backend_store: "mdb",
+            samba_dc_mitkrb5: true,
             samba_master_address: "10.64.6.10",
             samba_network: "10.64.6.0/24",
             samba_generate_domain_config: true,

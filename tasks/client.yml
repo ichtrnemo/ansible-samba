@@ -15,7 +15,7 @@
     path: /etc/NetworkManager/NetworkManager.conf
     regexp: '^dns='
     line: 'dns=none'
-    backrefs: yes
+    backrefs: true #yes
     state: present
   register: nm_conf_is
   notify: restart networkmanager
@@ -23,10 +23,10 @@
 
 - name: Add line if not configured
   lineinfile:
-    state   : present
-    dest    : /etc/NetworkManager/NetworkManager.conf
-    line    : 'dns=none'
-    regexp  : ''
+    state: present
+    dest: /etc/NetworkManager/NetworkManager.conf
+    line: 'dns=none'
+    regexp: ''
     insertafter: EOF
   when:
     - networkmanager_present.rc == 0
@@ -46,7 +46,7 @@
     path: /etc/net/ifaces/eth0/options
     regexp: '^DISABLED='
     line: 'DISABLED=no'
-    backrefs: yes
+    backrefs: true #yes
     state: present
   register: net_conf_is
   changed_when: managed_by_etcnet|bool and net_conf_is.changed
@@ -55,7 +55,7 @@
 
 
 - meta: flush_handlers
-  ignore_errors: yes
+  ignore_errors: true #yes
 
 - name: wait for node to comeback
   wait_for_connection:

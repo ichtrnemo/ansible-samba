@@ -11,9 +11,10 @@
     samba_admin_pass: peebieY4
     samba_dns_forward: 8.8.8.8
     samba_dns_backend: BIND9_DLZ
-    samba_backend_store: tdb
+    samba_backend_store: mdb
+    samba_dc_mitkrb5: true
     samba_master_address: 10.64.6.1
-  tags: [ "master" ]
+  tags: ["master"]
 
 - name: deploy samba DC replicas
   hosts: sambaDC-replicas
@@ -25,10 +26,14 @@
     samba_realm: domain.alt
     samba_domain: domain
     samba_admin_pass: peebieY4
+    samba_dns_forward: 8.8.8.8
+    samba_dns_backend: BIND9_DLZ
+    samba_backend_store: mdb
+    samba_dc_mitkrb5: true
     samba_master_address: 10.64.6.1
     samba_master_hostname: dc0
     samba_network: 10.64.6.0/24
-  tags: [ "replicas" ]
+  tags: ["replicas"]
 
 - name: deploy samba clients
   hosts: samba-clients
@@ -41,4 +46,4 @@
     samba_domain: domain
     samba_admin_pass: peebieY4
     samba_master_address: 10.64.6.1
-  tags: [ "clients" ]
+  tags: ["clients"]

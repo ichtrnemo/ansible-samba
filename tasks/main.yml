@@ -10,7 +10,7 @@
     register: openresolv_install
 
   - name: check if altlinux-openresolv service exists
-    command: service altlinux-openresolv status
+    command: systemctl status altlinux-openresolv
     register:
       altlinux_openresolv_status
     failed_when: false
@@ -50,7 +50,10 @@
       mode: 0644
 
   - name: create dir for kdc.conf
-    shell: "mkdir -p /usr/local/samba/private" # /var/lib/samba/private
+    file:
+      path: "/usr/local/samba/private"
+      state: directory
+    #shell: "mkdir -p /usr/local/samba/private" # /var/lib/samba/private
 
   - name: create kdc.conf
     template:

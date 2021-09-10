@@ -8,7 +8,7 @@
     enabled: false
     state: stopped
   register: cmd_result
-  failed_when: "cmd_result|failed and ('find' not in cmd_result.msg and 'found' not in cmd_result.msg)"
+  failed_when: "cmd_result is failed and ('find' not in cmd_result.msg and 'found' not in cmd_result.msg)"
 
 - name: Stop Kerberos V5 KDC if already started
   service:
@@ -16,7 +16,7 @@
     enabled: false
     state: stopped
   register: cmd_result
-  failed_when: "cmd_result|failed and ('find' not in cmd_result.msg and 'found' not in cmd_result.msg)"
+  failed_when: "cmd_result is failed  and ('find' not in cmd_result.msg and 'found' not in cmd_result.msg)"
 
 - name: Stop Kerberos V5 Admin server if already started
   service:
@@ -24,7 +24,7 @@
     enabled: false
     state: stopped
   register: cmd_result
-  failed_when: "cmd_result|failed and ('find' not in cmd_result.msg and 'found' not in cmd_result.msg)"
+  failed_when: "cmd_result is failed and ('find' not in cmd_result.msg and 'found' not in cmd_result.msg)"
 
 - name: Stop Kerberos V5 replica KDC update server if already started
   service:
@@ -32,14 +32,14 @@
     enabled: false
     state: stopped
   register: cmd_result
-  failed_when: "cmd_result|failed and ('find' not in cmd_result.msg and 'found' not in cmd_result.msg)"
+  failed_when: "cmd_result is failed and ('find' not in cmd_result.msg and 'found' not in cmd_result.msg)"
 
 - name: Stop Samba DC if already started
   service:
     name: samba
     state: stopped
   register: cmd_result
-  failed_when: "cmd_result|failed and ('find' not in cmd_result.msg and 'found' not in cmd_result.msg)"
+  failed_when: "cmd_result is failed and ('find' not in cmd_result.msg and 'found' not in cmd_result.msg)"
 
 - name: Stop Samba fileserver if already started
   service:
@@ -47,7 +47,7 @@
     enabled: false
     state: stopped
   register: cmd_result
-  failed_when: "cmd_result|failed and ('find' not in cmd_result.msg and 'found' not in cmd_result.msg)"
+  failed_when: "cmd_result is failed and ('find' not in cmd_result.msg and 'found' not in cmd_result.msg)"
 
 - name: Stop Samba NetBIOS over IP if already started
   service:
@@ -55,7 +55,7 @@
     enabled: false
     state: stopped
   register: cmd_result
-  failed_when: "cmd_result|failed and ('find' not in cmd_result.msg and 'found' not in cmd_result.msg)"
+  failed_when: "cmd_result is failed and ('find' not in cmd_result.msg and 'found' not in cmd_result.msg)"
 
 - name: Check if conflicting processes are running
   shell: |

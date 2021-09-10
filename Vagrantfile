@@ -1,8 +1,8 @@
 require 'mkmf'
 require 'fileutils'
 
-NUM_CONTROLLERS=1
-NUM_CLIENTS=1
+NUM_CONTROLLERS=3
+NUM_CLIENTS=3
 
 dcs=NUM_CONTROLLERS - 1
 cls=NUM_CLIENTS - 1
@@ -56,6 +56,7 @@ Vagrant.configure("2") do |config|
             },
           }
           ansible.extra_vars = {
+            ansible_python_interpreter: "/usr/bin/python3",
             samba_realm: "domain.alt",
             samba_domain: "domain",
             samba_admin_pass: "peebieY4",

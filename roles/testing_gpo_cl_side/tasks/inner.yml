@@ -1,0 +1,42 @@
+---
+
+- name: test loop {{ variant }}
+  debug:
+    msg: "variant: {{ variant }}"
+
+- name: restore gpo
+  shell: samba-tool gpo restore 'My Policy' "/vagrant/repo/backup/{{ variant }}" -U Administrator --password={{ samba_admin_pass }}
+  register: restore_result
+
+#- name: get gpo name
+#  debug: var=restore_result
+
+- name: get gpo name 2
+  debug: var=restore_result.stdout_lines[1].split()[5]
+
+- name: add a gpo link to a container
+  shell: samba-tool gpo setlink 'OU=My Test Domain,DC=domain,DC=alt' {{ restore_result.stdout_lines[1].split()[5] }} -U Administrator --password={{ samba_admin_pass }}
+
+- name: set backend for gpupdate
+  shell: gpupdate-setup set-backend samba
+
+- name: apply policies
+  shell: gpoa --loglevel 0
+
+- name: check results (shell)
+  shell: /vagrant/repo/results/{{ variant }}/check.sh
+
+#- name: get gpo name 3
+#  debug: var=restore_result.stdout_lines[1].split()[5]
+
+- name: delete gpo
+  shell: samba-tool gpo del {{ restore_result.stdout_lines[1].split()[5] }} -U Administrator --password={{ samba_admin_pass }}
+#  become_method: su
+#  become_flags: '-'
+
+#- name: check results
+#  script: /vagrant/repo/results/{{ variant }}/check.sh
+#  shell: /vagrant/repo/results/{{ variant }}/check.sh
+#  become_method: su
+#  become_flags: '-'
+

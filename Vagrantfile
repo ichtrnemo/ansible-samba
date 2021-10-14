@@ -1,8 +1,8 @@
 require 'mkmf'
 require 'fileutils'
 
-NUM_CONTROLLERS=3
-NUM_CLIENTS=3
+NUM_CONTROLLERS=1
+NUM_CLIENTS=1
 
 dcs=NUM_CONTROLLERS - 1
 cls=NUM_CLIENTS - 1
@@ -38,9 +38,11 @@ Vagrant.configure("2") do |config|
           ansible.become_user = "root"
           ansible.limit = "all"
           ansible.playbook = "provision.yml"
+          #ansible.skip_tags = "testing_gpo"
           ansible.groups = {
             "all:vars" => {
               "ansible_become" => "yes"
+#              "ansible_become_password" => "123"
             },
             "sambaDC-master" => ["dc0"],
             "sambaDC-master:vars" => {
@@ -56,6 +58,7 @@ Vagrant.configure("2") do |config|
             },
           }
           ansible.extra_vars = {
+            ansible_become_password: "123",
             ansible_python_interpreter: "/usr/bin/python3",
             samba_realm: "domain.alt",
             samba_domain: "domain",

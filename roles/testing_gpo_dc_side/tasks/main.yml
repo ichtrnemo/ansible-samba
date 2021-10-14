@@ -1,0 +1,21 @@
+---
+# tasks file for testing_gpo_dc_side
+#- name: create gpo
+#  shell: samba-tool gpo create 'My Domain Policy' -U Administrator --password={{ samba_admin_pass }}
+#  register: task_result
+
+- name:  create ou
+  shell: samba-tool ou add 'OU=My Test Domain'
+
+- name: move computer to ou
+  shell: samba-tool computer move CL0 'OU=My Test Domain'
+
+- name: move user to ou
+  shell: samba-tool user move Administrator 'OU=My Test Domain'
+
+#- name: get gpo name
+#  debug: var=task_result.stdout_lines[1].split()[6]
+
+#- name: add a gpo link to a container
+#  shell: samba-tool gpo setlink 'OU=My Test Domain,DC=domain,DC=alt' {{ task_result.stdout_lines[1].split()[6] }} -U Administrator --password={{ samba_admin_pass }}
+#  changed_when: false

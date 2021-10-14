@@ -1,0 +1,4 @@
+---
+- hosts: sambaDC-master
+  tasks:
+    - include: tasks/preparation_for_test_gpo.yml

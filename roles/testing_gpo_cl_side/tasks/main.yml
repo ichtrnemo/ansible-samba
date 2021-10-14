@@ -1,0 +1,9 @@
+---
+# tasks file for testing_gpo_cl_side
+
+- name: test  clients
+  include_tasks: inner.yml
+  loop: "{{ controls }}"
+  loop_control:
+    loop_var: variant
+
